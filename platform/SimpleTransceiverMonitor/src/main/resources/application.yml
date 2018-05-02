@@ -1,0 +1,13 @@
+
+spring:
+  dubbo:
+    scan: cn.krly.platform.transceiver.provider
+    application:
+      name: transceiver-cluster-monitor
+    registry:
+      address: zookeeper://127.0.0.1:2181
+    protocol:
+      name: dubbo
+      port: 14116
+    provider:
+      retries: 0

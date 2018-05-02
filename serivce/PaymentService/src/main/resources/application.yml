@@ -1,0 +1,24 @@
+
+spring:
+  dubbo:
+    scan: cn.krly.service.payment.provider
+    application:
+      name: payment-service
+    registry:
+      address: zookeeper://127.0.0.1:2181
+    protocol:
+      name: dubbo
+      port: 14626
+    provider:
+      retries: 0
+
+payment:
+  database:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/payment?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: root
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
