@@ -50,15 +50,24 @@ public class HttpsUtils {
 
             URL console = new URL(url);
             HttpsURLConnection conn = (HttpsURLConnection) console.openConnection();
+            conn.setRequestMethod("POST");
             conn.setSSLSocketFactory(sslContext.getSocketFactory());
             conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
             conn.setDoOutput(true);
+            conn.setUseCaches(false);
             conn.connect();
 
-            DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-            out.write(content.getBytes(charset));
-            out.flush();
-            out.close();
+            // with basic authorization
+            //connection.setRequestProperty("Authorization", "Basic "+ encodedAuthorization);
+
+            //conn.setRequestProperty("Content-Type", "application/text");
+
+            if (content != null && content.length() > 0) {
+                DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+                out.write(content.getBytes(charset));
+                out.flush();
+                out.close();
+            }
 
             InputStream inputStream = conn.getInputStream();
             return getInputData(inputStream);
@@ -69,6 +78,8 @@ public class HttpsUtils {
 
         return null;
     }
+
+
 
     public static byte[] get(String url) {
         return get(url, "UTF-8");
@@ -83,6 +94,7 @@ public class HttpsUtils {
 
             URL console = new URL(url);
             HttpsURLConnection conn = (HttpsURLConnection) console.openConnection();
+            conn.setRequestMethod("GET");
             conn.setSSLSocketFactory(sslContext.getSocketFactory());
             conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
             conn.setDoOutput(true);
@@ -116,7 +128,7 @@ public class HttpsUtils {
 
     //===================================================================================
     public static void main(String[] args) {
-        byte[] data = HttpsUtils.post("https://www.baidu.com");
+        byte[] data = HttpsUtils.get("https://www.baidu.com");
         try {
             String str = new String(data, "UTF-8");
             System.out.println(str);

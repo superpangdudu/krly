@@ -1,5 +1,7 @@
 package cn.krly.utility.common;
 
+import java.util.Base64;
+
 /**
  * Created by Administrator on 2018/5/2.
  */
@@ -19,12 +21,12 @@ public class Base64Utils {
         if (data == null || data.length == 0)
             return "";
 
-        String postfix = "";
-        int postfixLength = data.length % 3;
-        if (postfixLength == 2)
-            postfix = "=";
-        else if (postfixLength == 1)
-            postfix = "==";
+        String padding = "";
+        int paddingLength = data.length % 3;
+        if (paddingLength == 2)
+            padding = "=";
+        else if (paddingLength == 1)
+            padding = "==";
 
         StringBuilder sb = new StringBuilder(data.length * 4 / 3 + 4);
         for (int offset = 0; offset < data.length; offset += 3) {
@@ -35,8 +37,8 @@ public class Base64Utils {
             encode(first, second, third, sb);
         }
 
-        if (postfixLength > 0)
-            sb.replace(sb.length() - postfix.length(), sb.length(), postfix);
+        if (paddingLength > 0)
+            sb.replace(sb.length() - padding.length(), sb.length(), padding);
 
         return sb.toString();
     }
@@ -114,6 +116,34 @@ public class Base64Utils {
         System.out.println(Base64Utils.encode("11".getBytes()));
 
         byte[] buf = Base64Utils.decode("MTExMTE=");
+
+        //assert(buf.equals());
+
+        long startTime = System.currentTimeMillis();
+
+//        for (int n = 0; n < 100000000; n++) {
+//            byte[] bufA = Base64.getEncoder().encode("1234567890hahawawakaka".getBytes());
+//            String s = new String(bufA);
+//        }
+//        System.out.println("Base64.encode took: " + (System.currentTimeMillis() - startTime));
+//
+//        startTime = System.currentTimeMillis();
+//        for (int n = 0; n < 100000000; n++) {
+//            String value = encode("1234567890hahawawakaka".getBytes());
+//        }
+//        System.out.println("Base64.encode took: " + (System.currentTimeMillis() - startTime));
+
+        startTime = System.currentTimeMillis();
+        for (int n = 0; n < 100000000; n++) {
+            Base64.getDecoder().decode("MTIzNDU2Nzg5MGhhaGF3YXdha2FrYQ==");
+        }
+        System.out.println("Base64.decode took: " + (System.currentTimeMillis() - startTime));
+
+        startTime = System.currentTimeMillis();
+        for (int n = 0; n < 100000000; n++) {
+            decode("MTIzNDU2Nzg5MGhhaGF3YXdha2FrYQ==");
+        }
+        System.out.println("Base64.encode took: " + (System.currentTimeMillis() - startTime));
     }
 
 }
