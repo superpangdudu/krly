@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Map;
+import java.util.Set;
 
 
 public class HttpsUtils {
@@ -43,16 +45,8 @@ public class HttpsUtils {
 
     public static byte[] post(String url, String content, String charset) {
         try {
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null,
-                    new TrustManager[] { new TrustAnyTrustManager() },
-                    new java.security.SecureRandom());
-
-            URL console = new URL(url);
-            HttpsURLConnection conn = (HttpsURLConnection) console.openConnection();
+            HttpsURLConnection conn = getHttpsURLConnection(url);
             conn.setRequestMethod("POST");
-            conn.setSSLSocketFactory(sslContext.getSocketFactory());
-            conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
             conn.setDoOutput(true);
             conn.setUseCaches(false);
             conn.connect();
@@ -87,17 +81,8 @@ public class HttpsUtils {
 
     public static byte[] get(String url, String charset) {
         try {
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null,
-                    new TrustManager[] { new TrustAnyTrustManager() },
-                    new java.security.SecureRandom());
-
-            URL console = new URL(url);
-            HttpsURLConnection conn = (HttpsURLConnection) console.openConnection();
+            HttpsURLConnection conn = getHttpsURLConnection(url);
             conn.setRequestMethod("GET");
-            conn.setSSLSocketFactory(sslContext.getSocketFactory());
-            conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
-            conn.setDoOutput(true);
             conn.connect();
 
             InputStream inputStream = conn.getInputStream();
@@ -111,6 +96,28 @@ public class HttpsUtils {
     }
 
     //===================================================================================
+    private static HttpsURLConnection getHttpsURLConnection(String url) throws Exception {
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(null,
+                new TrustManager[] { new TrustAnyTrustManager() },
+                new java.security.SecureRandom());
+
+        URL console = new URL(url);
+        HttpsURLConnection conn = (HttpsURLConnection) console.openConnection();
+        conn.setSSLSocketFactory(sslContext.getSocketFactory());
+        conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
+
+        return conn;
+    }
+
+    private static void setHeaders(HttpsURLConnection connection, Map<String, String> paramMap) {
+        Set<String> keySet = paramMap.keySet();
+        for (String key : keySet) {
+            String value = paramMap.get(key);
+            connection.setRequestProperty(key, value);
+        }
+    }
+
     private static byte[] getInputData(InputStream inputStream) throws IOException {
         if (inputStream == null)
             return null;

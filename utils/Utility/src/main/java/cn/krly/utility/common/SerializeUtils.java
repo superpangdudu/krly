@@ -8,6 +8,7 @@ public class SerializeUtils {
     public static <T extends Serializable> byte[] serialize(T object) {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)) {
+
             objectOutputStream.writeObject(object);
 
             byte[] data = byteArrayOutputStream.toByteArray();
