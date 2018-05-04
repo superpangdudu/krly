@@ -11,3 +11,8 @@ spring:
       port: 14116
     provider:
       retries: 0
+
+app:
+  redis:
+    host: 127.0.0.1
+    port: 6379

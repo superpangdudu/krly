@@ -3,12 +3,26 @@ package cn.krly.platform.transceiver.provider;
 import cn.krly.platform.transceiver.api.ITransceiverMonitor;
 import cn.krly.utility.db.JedisPoolUtils;
 import com.alibaba.dubbo.config.annotation.Service;
+import org.springframework.beans.factory.annotation.Value;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import javax.annotation.PostConstruct;
+
 @Service(provider = "DefaultProviderConfig")
 public class TransceiverMonitorImpl implements ITransceiverMonitor {
-    private JedisPool jedisPool = JedisPoolUtils.newJedisPoolInstance("127.0.0.1", 6379);
+    @Value("${app.redis.host}")
+    private String redisHost;
+
+    @Value("${app.redis.port}")
+    private int redisPort;
+
+    private JedisPool jedisPool;
+
+    @PostConstruct
+    public void init() {
+        jedisPool = JedisPoolUtils.newJedisPoolInstance(redisHost, redisPort);
+    }
 
     @Override
     public void onChannelConnected(int token, String host, int port) {
