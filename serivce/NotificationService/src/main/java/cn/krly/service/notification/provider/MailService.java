@@ -31,7 +31,7 @@ public class MailService implements IMailService {
             Transport transport = session.getTransport();
             transport.connect(senderAccount, senderPassword);
 
-            Message message = getMessage(session,
+            Message message = newMessage(session,
                     senderAddress, recipientAddress,
                     subject, content);
 
@@ -41,10 +41,9 @@ public class MailService implements IMailService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-    private Message getMessage(Session session,
+    private Message newMessage(Session session,
                                String senderAddress, String recipientAddress,
                                String subject, String content) throws Exception {
         MimeMessage message = new MimeMessage(session);
@@ -64,6 +63,6 @@ public class MailService implements IMailService {
                 "superlee19@163.com",
                 "1659929144@qq.com",
                 "smtp.163.com",
-                "test", "test content");
+                "test", "test content<a href=http://home.baidu.com>关于百度</a>");
     }
 }

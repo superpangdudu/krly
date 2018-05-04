@@ -14,19 +14,19 @@ import org.springframework.context.annotation.Configuration;
 public class DubboConfiguration {
 
     @Bean(name = "MailServiceProviderConfig")
-    public ProviderConfig getOrderServiceProviderConfig(ApplicationConfig applicationConfig, RegistryConfig registryConfig) {
+    public ProviderConfig getMailServiceProviderConfig(ApplicationConfig applicationConfig, RegistryConfig registryConfig) {
         ProtocolConfig protocolConfig = getProtocolConfig("dubbo", 15625);
         return getProviderConfig(applicationConfig, registryConfig, protocolConfig);
     }
 
     @Bean(name = "SMSServiceProviderConfig")
-    public ProviderConfig getProductServiceProviderConfig(ApplicationConfig applicationConfig, RegistryConfig registryConfig) {
+    public ProviderConfig getSMSServiceProviderConfig(ApplicationConfig applicationConfig, RegistryConfig registryConfig) {
         ProtocolConfig protocolConfig = getProtocolConfig("dubbo", 15635);
         return getProviderConfig(applicationConfig, registryConfig, protocolConfig);
     }
 
     @Bean(name = "NotificationServiceProviderConfig")
-    public ProviderConfig getAliPayServiceProviderConfig(ApplicationConfig applicationConfig, RegistryConfig registryConfig) {
+    public ProviderConfig getNotificationServiceProviderConfig(ApplicationConfig applicationConfig, RegistryConfig registryConfig) {
         ProtocolConfig protocolConfig = getProtocolConfig("dubbo", 15725);
         return getProviderConfig(applicationConfig, registryConfig, protocolConfig);
     }
