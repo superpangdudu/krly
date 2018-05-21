@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TransceiverMonitorProxy implements ISimpleNetworkEventListener {
-    
+
     @Reference(consumer = "DefaultConsumerConfig")
     private ITransceiverMonitor transceiverMonitor;
 
