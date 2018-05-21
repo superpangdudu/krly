@@ -1,0 +1,22 @@
+
+server:
+  port: 8180
+
+spring:
+  session:
+    store-type: redis
+  redis:
+    database: 4
+    host: 127.0.0.1
+    port: 6379
+    password:
+
+app:
+  database:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_battery?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: root
+  redis:
+    host: 127.0.0.1
+    port: 6379
