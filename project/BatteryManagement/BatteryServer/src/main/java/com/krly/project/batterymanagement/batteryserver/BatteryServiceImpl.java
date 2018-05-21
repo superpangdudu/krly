@@ -113,6 +113,19 @@ public class BatteryServiceImpl implements IBatteryService {
     public void onBatteryContainerUnregistered(String id) {
         try (Jedis jedis = jedisPool.getResource()) {
             jedis.hdel(id);
+
+            String value = jedis.hget(id, KEY_SLOT);
+            if (value == null || value.equals(""))
+                return;
+
+            int slot = Integer.parseInt(value);
+            for (int n = 0; n < slot; n++) {
+                value = jedis.hget(id, KEY_SLOT_PREFIX + n);
+                if (value == null || value.equals("") || value.equals(None))
+                    continue;
+
+                jedis.hdel(value);
+            }
         }
     }
 
@@ -144,6 +157,9 @@ public class BatteryServiceImpl implements IBatteryService {
             jedis.hset(key, KEY_CONTAINER, None);
             jedis.hset(key, KEY_SLOT, None);
         }
+
+        //
+        sendMessage("rent", id, status, batteryId, slotId, timestamp);
     }
 
     @Override
@@ -160,6 +176,9 @@ public class BatteryServiceImpl implements IBatteryService {
             jedis.hset(key, KEY_STATUS, Integer.toString(status));
             jedis.hset(key, KEY_USER, None);
         }
+
+        //
+        sendMessage("return", id, status, batteryId, slotId, timestamp);
     }
 
     @Override
@@ -181,9 +200,9 @@ public class BatteryServiceImpl implements IBatteryService {
     }
 
     //===================================================================================
-    private void sendRentMessage(String id, int status, long batteryId, int slotId, byte[] timestamp) {
+    private void sendMessage(String operation, String id, int status, long batteryId, int slotId, byte[] timestamp) {
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("op", "rent");
+        paramMap.put("op", operation);
         paramMap.put("id", id);
         paramMap.put("status", status);
         paramMap.put("batteryId", batteryId);
@@ -191,19 +210,6 @@ public class BatteryServiceImpl implements IBatteryService {
         paramMap.put("timestamp", timestamp);
 
         String jsonString = JSON.toJSONString(paramMap);
-        MyProducer.getInstance().send(jsonString);
-    }
-
-    private void sendReturnMessage(String id, int status, long batteryId, int slotId, byte[] timestamp) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("op", "return");
-        paramMap.put("id", id);
-        paramMap.put("status", status);
-        paramMap.put("batteryId", batteryId);
-        paramMap.put("slotId", slotId);
-        paramMap.put("timestamp", timestamp);
-
-        String jsonString = JSON.toJSONString(paramMap);
-        MyProducer.getInstance().send(jsonString);
+        MessageSender.getInstance().send(jsonString);
     }
 }

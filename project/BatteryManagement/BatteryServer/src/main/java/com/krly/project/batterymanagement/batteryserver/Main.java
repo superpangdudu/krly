@@ -21,8 +21,8 @@ public class Main {
         final int port = Integer.parseInt(commandLine.getOptionValue("p", "32321"));
 
         //
-        MyProducer myProducer = MyProducer.getInstance();
-        myProducer.start();
+        MessageSender messageSender = MessageSender.getInstance();
+        messageSender.start();
 
         //
         LocalCommandServer localCommandServer = new LocalCommandServer(host, port);

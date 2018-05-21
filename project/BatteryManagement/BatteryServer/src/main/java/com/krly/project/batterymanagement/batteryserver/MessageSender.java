@@ -1,23 +1,26 @@
 package com.krly.project.batterymanagement.batteryserver;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.kafka.clients.producer.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Future;
 
 /**
  * Created by Administrator on 2018/5/21.
  */
-public class MyProducer {
-    private static volatile MyProducer INSTANCE;
-    private MyProducer() {
+public class MessageSender {
+    private static volatile MessageSender INSTANCE;
+    private MessageSender() {
 
     }
 
-    public static MyProducer getInstance() {
+    public static MessageSender getInstance() {
         if (INSTANCE == null) {
-            synchronized (MyProducer.class) {
-                INSTANCE = new MyProducer();
+            synchronized (MessageSender.class) {
+                INSTANCE = new MessageSender();
             }
         }
         return INSTANCE;
@@ -40,11 +43,11 @@ public class MyProducer {
         props.put("send.buffer.bytes", "102400");
 
         //
-        producer = new KafkaProducer<String, String>(props);
+        producer = new KafkaProducer<>(props);
     }
 
     public void send(String value) {
-        ProducerRecord<String, String> msg = new ProducerRecord<String, String>("battery", value);
+        ProducerRecord<String, String> msg = new ProducerRecord<>("battery", value);
         producer.send(msg);
     }
 
@@ -54,15 +57,26 @@ public class MyProducer {
         future.get();
     }
 
-    public void test() throws Exception {
-        ProducerRecord<String, String> msg = new ProducerRecord<String, String>("battery", "hello");
+    void test() throws Exception {
+        ProducerRecord<String, String> msg = new ProducerRecord<>("battery", "hello");
         Future<RecordMetadata> future = producer.send(msg);
         RecordMetadata recordMetadata = future.get();
     }
 
     //===================================================================================
     public static void main(String[] args) throws Exception {
-        MyProducer.getInstance().start();
-        MyProducer.getInstance().test();
+        MessageSender.getInstance().start();
+        MessageSender.getInstance().test();
+
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("op", "return");
+        paramMap.put("id", 123456);
+        paramMap.put("status", 0x04);
+        paramMap.put("batteryId", 332211);
+        paramMap.put("slotId", 4);
+        paramMap.put("timestamp", "lalala");
+
+        String jsonString = JSON.toJSONString(paramMap);
+        MessageSender.getInstance().send(jsonString);
     }
 }
