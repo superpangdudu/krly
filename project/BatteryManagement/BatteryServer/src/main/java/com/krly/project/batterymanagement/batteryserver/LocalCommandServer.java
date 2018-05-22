@@ -2,6 +2,7 @@ package com.krly.project.batterymanagement.batteryserver;
 
 import cn.krly.project.batterymanagement.protocol.*;
 import cn.krly.utility.common.SerializeUtils;
+import com.krly.project.batterymanagement.command.RentCommand;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

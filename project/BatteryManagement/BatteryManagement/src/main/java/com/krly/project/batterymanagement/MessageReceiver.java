@@ -12,7 +12,7 @@ import java.util.Properties;
 
 @Component
 public class MessageReceiver {
-    
+
     @PostConstruct
     public void start() {
         Properties props = new Properties();

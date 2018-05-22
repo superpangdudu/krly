@@ -1,4 +1,4 @@
-package com.krly.project.batterymanagement.batteryserver;
+package com.krly.project.batterymanagement.command;
 
 import java.io.Serializable;
 
@@ -6,12 +6,12 @@ import java.io.Serializable;
  * Created by Administrator on 2018/5/18.
  */
 public class RentCommand implements Serializable {
-    private String cmdId;
+    private String cmdId; // "rent", "return"
     private String deviceId;
-    private int transactionId;
+    private int transactionId; // get from redis
     private int orderId;
     private int userId;
-    private byte[] mac;
+    private byte[] mac; // get from redis
     private int result;
 
     public String getCmdId() {

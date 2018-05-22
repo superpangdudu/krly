@@ -10,6 +10,8 @@ import redis.clients.jedis.JedisPool;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.krly.project.batterymanagement.common.RedisKey.*;
+
 /**
  * Created by Administrator on 2018/5/18.
  */
@@ -32,25 +34,7 @@ public class BatteryServiceImpl implements IBatteryService {
     //===================================================================================
     private JedisPool jedisPool = JedisPoolUtils.newJedisPoolInstance("127.0.0.1", 6379);
 
-    private static final String KEY_HEARTBEAT = "heartbeat";
-    private static final String KEY_ID = "IMEI";
-    private static final String KEY_MAC = "mac";
-    private static final String KEY_RANDOM = "random";
-    private static final String KEY_TRANSACTION = "transaction";
-    private static final String KEY_FIRMWARE_VERSION = "firmware";
-    private static final String KEY_HARDWARE_VERSION = "hardware";
-    private static final String KEY_LOCAL = "local";
-    private static final String KEY_REMOTE = "remote";
-    private static final String KEY_BATTERIES_COUNT = "battery_count";
-    private static final String KEY_BATTERY_PREFIX = "battery:";
-    private static final String KEY_SLOT_PREFIX = "slot:";
-    private static final String KEY_SLOT = "slot";
-    private static final String KEY_CONTAINER = "container";
-    private static final String KEY_USER = "user";
-    private static final String KEY_STATUS = "status";
-    private static final String KEY_BINARY = "binary";
 
-    private static final String None = "0";
 
     //===================================================================================
     @Override

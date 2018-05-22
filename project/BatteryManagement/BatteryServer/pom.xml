@@ -53,6 +53,11 @@
             <artifactId>utility</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>cn.krly.project.batterymanagement</groupId>
+            <artifactId>battery-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
     </dependencies>
 
